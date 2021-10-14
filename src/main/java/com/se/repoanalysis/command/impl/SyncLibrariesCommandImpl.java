@@ -49,12 +49,7 @@ public class SyncLibrariesCommandImpl implements SyncLibrariesCommand {
   }
 
   private Mono<String> doesLibraryExist(String line) {
-    return libraryRepository.existsByName(line).map(aBoolean -> {
-      if (!BooleanUtils.isTrue(aBoolean)) {
-        return line;
-      } else {
-        return StringUtils.EMPTY;
-      }
-    });
+    return libraryRepository.existsByName(line)
+        .map(aBoolean -> !BooleanUtils.isTrue(aBoolean) ? line : StringUtils.EMPTY);
   }
 }
