@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.blibli.oss</groupId>
+        <artifactId>blibli-backend-framework</artifactId>
+        <version>0.0.7</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+
+    <groupId>com.se</groupId>
+    <artifactId>repo-analysis</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>repo-analysis</name>
+    <description>Repo Analyzer</description>
+    <properties>
+        <maven.build.timestamp.format>yyyy-MM-dd HH:mm:ss</maven.build.timestamp.format>
+        <java.version>1.8</java.version>
+        <blibli-framework.version>0.0.8</blibli-framework.version>
+    </properties>
+    <repositories>
+        <repository>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <id>bintray-bliblidotcom-maven</id>
+            <name>bintray</name>
+            <url>https://dl.bintray.com/bliblidotcom/maven</url>
+        </repository>
+    </repositories>
+    <dependencyManagement>
+        <dependencies>
+
+        </dependencies>
+    </dependencyManagement>
+    <dependencies>
+        <dependency>
+            <groupId>com.blibli.oss</groupId>
+            <artifactId>blibli-backend-framework-swagger</artifactId>
+            <version>${blibli-framework.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.blibli.oss</groupId>
+            <artifactId>blibli-backend-framework-command</artifactId>
+            <version>${blibli-framework.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.blibli.oss</groupId>
+            <artifactId>blibli-backend-framework-sleuth</artifactId>
+            <version>${blibli-framework.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.blibli.oss</groupId>
+            <artifactId>blibli-backend-framework-version</artifactId>
+            <version>${blibli-framework.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.blibli.oss</groupId>
+            <artifactId>blibli-backend-framework-api-client</artifactId>
+            <version>${blibli-framework.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-mongodb-reactive</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webflux</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <excludes>
+                        <exclude>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                        </exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
