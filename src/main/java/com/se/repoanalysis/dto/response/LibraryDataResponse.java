@@ -20,4 +20,5 @@ public class LibraryDataResponse {
   private String description;
   private Map<String, VersionDetail> versions;
   private Map<Object, Object> time;
+  private Long downloads;
 }
