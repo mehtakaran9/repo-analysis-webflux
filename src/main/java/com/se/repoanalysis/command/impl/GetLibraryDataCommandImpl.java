@@ -20,6 +20,9 @@ import reactor.util.function.Tuple2;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.util.Date;
 
 /**
  * @author Karan Mehta
@@ -31,10 +34,12 @@ public class GetLibraryDataCommandImpl implements GetLibraryDataCommand {
   private final NodeRegistryApiClient nodeRegistryApiClient;
   private final NpmJsApiClient npmJsApiClient;
   private final ObjectMapper objectMapper = new ObjectMapper();
-  private final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
+  private final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
   private final LibraryRepository libraryRepository;
   private final ErrorLibraryRepository errorLibraryRepository;
   private static final String SEPARATOR = ":";
+  private static final ZonedDateTime currentDate =
+      LocalDate.now().atStartOfDay(ZoneId.systemDefault());
 
   @Override
   public Mono<LibraryData> execute(String libraryName) {
@@ -60,8 +65,8 @@ public class GetLibraryDataCommandImpl implements GetLibraryDataCommand {
   }
 
   private String getInterval() {
-    LocalDate end = LocalDate.now();
-    LocalDate start = LocalDate.now().minusYears(1);
+    Date end = Date.from(currentDate.toInstant());
+    Date start = Date.from(currentDate.minusYears(1).toInstant());
     String startDate = simpleDateFormat.format(start);
     String endDate = simpleDateFormat.format(end);
     return startDate + SEPARATOR + endDate;

@@ -15,7 +15,7 @@ import reactor.core.publisher.Mono;
 @Component
 @ApiClient(name = "npmJsApi", fallback = NpmJsApiClientFallback.class)
 public interface NpmJsApiClient {
-  @RequestMapping(method = RequestMethod.GET, value = "/downloads/point/{interval}/{packageName}")
+  @RequestMapping(method = RequestMethod.GET, value = "/downloads/point/{interval}/{package}")
   Mono<DownloadDataDto> getDownloads(@PathVariable(value = "interval") String interval,
       @PathVariable(value = "package") String packageName);
 }
