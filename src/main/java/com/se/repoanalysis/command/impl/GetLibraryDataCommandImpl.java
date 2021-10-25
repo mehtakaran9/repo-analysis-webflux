@@ -18,6 +18,7 @@ import org.springframework.util.ObjectUtils;
 import reactor.core.publisher.Mono;
 import reactor.util.function.Tuple2;
 
+import javax.annotation.PostConstruct;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -40,11 +41,21 @@ public class GetLibraryDataCommandImpl implements GetLibraryDataCommand {
   private static final String SEPARATOR = ":";
   private static final ZonedDateTime currentDate =
       LocalDate.now().atStartOfDay(ZoneId.systemDefault());
+  private String interval;
+
+  @PostConstruct
+  private void getInterval() {
+    Date end = Date.from(currentDate.toInstant());
+    Date start = Date.from(currentDate.minusYears(1).toInstant());
+    String startDate = simpleDateFormat.format(start);
+    String endDate = simpleDateFormat.format(end);
+    interval = startDate + SEPARATOR + endDate;
+  }
 
   @Override
   public Mono<LibraryData> execute(String libraryName) {
     return Mono.zip(nodeRegistryApiClient.findLibrary(libraryName),
-            npmJsApiClient.getDownloads(getInterval(), libraryName))
+            npmJsApiClient.getDownloads(interval, libraryName))
         .map(this::convertLibraryDataResponse)
         .filter(libraryData -> !ObjectUtils.isEmpty(libraryData))
         .flatMap(libraryRepository::save)
@@ -62,13 +73,5 @@ public class GetLibraryDataCommandImpl implements GetLibraryDataCommand {
       libraryData.setDownloads(objects.getT2().getDownloads());
     }
     return libraryData;
-  }
-
-  private String getInterval() {
-    Date end = Date.from(currentDate.toInstant());
-    Date start = Date.from(currentDate.minusYears(1).toInstant());
-    String startDate = simpleDateFormat.format(start);
-    String endDate = simpleDateFormat.format(end);
-    return startDate + SEPARATOR + endDate;
   }
 }
