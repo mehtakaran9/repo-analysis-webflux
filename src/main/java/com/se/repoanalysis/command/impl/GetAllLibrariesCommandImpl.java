@@ -3,8 +3,8 @@ package com.se.repoanalysis.command.impl;
 import com.blibli.oss.backend.command.executor.CommandExecutor;
 import com.blibli.oss.backend.reactor.scheduler.SchedulerHelper;
 import com.se.repoanalysis.command.GetAllLibrariesCommand;
-import com.se.repoanalysis.command.GetLibraryDataCommand;
 import com.se.repoanalysis.model.Response;
+import com.se.repoanalysis.web.LibraryController;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -29,12 +29,14 @@ public class GetAllLibrariesCommandImpl implements GetAllLibrariesCommand {
   private final SchedulerHelper schedulerHelper;
   private final CommandExecutor commandExecutor;
 
+  @SuppressWarnings("unchecked")
   @Override
-  public Mono<Response<String>> execute(String request) {
+  public Mono<Response<String>> execute(LibraryController.FileCommandRequest request) {
     return Flux.fromStream(new BufferedReader(new InputStreamReader(Objects.requireNonNull(this.getClass()
             .getClassLoader()
-            .getResourceAsStream(request)), StandardCharsets.UTF_8)).lines())
-        .flatMap(libraryName -> commandExecutor.execute(GetLibraryDataCommand.class, libraryName)
+            .getResourceAsStream(request.getFile())), StandardCharsets.UTF_8)).lines())
+        .flatMap(libraryName -> commandExecutor.execute(request.getAClass(),
+                libraryName) //change the command class based on what you want to execute
             .subscribeOn(schedulerHelper.of(SYNC)))
         .then(Mono.fromCallable(() -> new Response<>(ACCEPTED)));
   }
